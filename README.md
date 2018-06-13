@@ -1,6 +1,8 @@
 # Godot-Engine-3.0-Behavior-Nodes
 The link between Godot and no-coding tools for video games creation
 
+(in english the second half)
+
 Come dice brevemente il titolo, questo progetto ha l'ambizione di voler diventare l'anello di congiunzione tra Godot e gli strumenti per lo sviluppo di videogiochi no-coding (ad esempio Construct 2/3, ClickTeam Fusion 2.5, etc.)
 
 Poter entrare nel merito del codice di quello che si sta realizzando consente una potenza altrimenti irraggiungibile (ovviamente, non sto dicendo nulla di nuovo), tuttavia poter creare un prototipo funzionante dell'idea che abbiamo in mente in pochi passaggi è qualcosa che alza la motivazione e la produttività a livelli mai visti (è qui che si collocano gli strumenti precedentemente citati).
@@ -38,6 +40,42 @@ Al di là dell'idea che può piacere o meno, come programmatore sono abbastanza 
 
 Per qualsiasi informazione, domanda o idea vogliate proporre, scrivetemi! e mi raccomando di commentare il codice!
 
-========================================================================================================================
+==========================================================
 
-TO DO: Aggiungere traduzione in lingua inglese
+(translated with the google translator)
+
+As the title briefly says, this project has the ambition to become the link between Godot and the tools for the development of no-coding videogames (for example Construct 2/3, ClickTeam Fusion 2.5, etc.)
+
+Being able to enter into the code of what is happening allows an otherwise unattainable power (of course, I'm not saying anything new), however being able to create a working prototype of the idea we have in mind in a few steps is something that raises the motivation and productivity at levels never seen before (this is where the previously mentioned tools are placed).
+
+As an example, from now on, I will only refer to Construct 2 and ClickTeam Fusion 2.5.
+
+Both these products have - as it should be - a development environment heavily focused on their characteristics (for example, both have a tool, more or less valid, for editing images that make up sprites, which allows you to create very prototypes quickly). Both have a drag-and-drop approach, both as regards the positioning of objects in the work area, and as regards the writing of the "code".
+
+While ClickTeamFusion 2.5 has a series of exporters (purchased separately) in order to publish their work on various platforms in native code, Construct 2 only produces HTML5 games (so to be able to bring them on the various platforms then special wrappers, such as nwjs for desktop or cordova for furniture.
+
+The strength of these tools lies not only in providing, as a basis, a great set of tools ready to use, to be added to the scene, which fit together to produce, quickly, something working, but above all in the possibility of create and add new ones (both have behind the very lively communities that have produced so many additional components).
+
+Moreover Construct 2 introduces a very interesting aspect, that is the possibility of adding behaviors to basic objects (for example I can add a Platform-Movement behavior to a sprite type object and, by running the project, see it move immediately to the pressure of the cursor movement keys and jump by pressing the space bar - of course every aspect of the behavior is configurable - and I can add to other sprite objects the Solid behavior so that my sprite player, equipped with Platform-Movement, will stop automatically going to run into it, all without writing a single line of code).
+
+Then? if they are so fantastic why go to Godot where, for everything I want to do, I have to write tons of lines of code?
+
+First of all because, as stated in the beginning, the possibility of entering into the merits of the code offers a power not comparable to other instruments, and secondly, because if the components developed for the instruments mentioned do not fit perfectly with our needs, we should modify (if code available in the case of ClickTeam Fusion 2.5, while in the case of Construct 2 the sources are all available) or even rewrite the components in question.
+
+This, in the case of Construct 2, will force us to learn to program in javascript (more precisely ecmascript) which is the language that is at its base while, in the case of ClickTeam Fusion 2.5, we will start with writing the component in C ++ (however as it is the basic interface), so we will have to translate it in java if we want to use the component on android, in object-c if we want to use it on ios or mac, in javascript if we want to use it for the exporter in html5, in actionscript if we want export to flash, etc.
+
+All very beautiful, but a real Babylon, with all that may derive from it (it is said that the functions we are going to use are present in the same way on all these languages, leading to inevitable compromises).
+
+This project, really ambitious, wants to give the developer the possibility to add behavioral nodes to the scenes that are being created, in order to reduce to the essential the amount of code to be written (focusing the attention more on game design than on the writing the code itself).
+
+The key points of the project will be:
+  - use of the GDScript only for the code of the behavior nodes (a single language that is the same used to write the game)
+  - all free and opensource (anyone can put his hand to the code to adapt it to their needs - everyone is * invited * to publish any bugfixes to the community)
+  - each behavior node must be added as a sub-node of the node to which the behavior is to be added
+  - all the configuration parameters of the behavior will have to be exposed (nobody will have to modify the code just to change the parameters)
+  
+Anyone can join the project at any time! the greater the number of behaviors we can provide, the faster the prototyping will be!
+
+Beyond the idea that can like it or not, as a programmer I'm pretty rusty ... so wherever you see that there are room for improvement in what I write (especially in terms of performance) correct me quietly!
+
+For any information, question or idea, please, write to me! and I recommend to comment on the code!
