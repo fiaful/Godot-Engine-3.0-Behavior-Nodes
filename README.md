@@ -1,7 +1,7 @@
 # Godot-Engine-3.0-Behavior-Nodes
 The link between Godot and no-coding tools for video games creation
 
-Come dice brevemente il titolo, questo progetto ha l'ambizione di voler diventare l'anello di congiunzione tra Godot e gli altri strumenti per lo sviluppo di videogiochi no-coding (ad esempio Construct 2/3, ClickTeam Fusion 2.5, etc.)
+Come dice brevemente il titolo, questo progetto ha l'ambizione di voler diventare l'anello di congiunzione tra Godot e gli strumenti per lo sviluppo di videogiochi no-coding (ad esempio Construct 2/3, ClickTeam Fusion 2.5, etc.)
 
 Poter entrare nel merito del codice di quello che si sta realizzando consente una potenza altrimenti irraggiungibile (ovviamente, non sto dicendo nulla di nuovo), tuttavia poter creare un prototipo funzionante dell'idea che abbiamo in mente in pochi passaggi è qualcosa che alza la motivazione e la produttività a livelli mai visti (è qui che si collocano gli strumenti precedentemente citati).
 
