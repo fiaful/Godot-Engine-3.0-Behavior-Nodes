@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://addons/Behaviors/Behavior8Directions2D.gd" type="Script" id=1]
+[ext_resource path="res://addons/Behaviors/icon8.png" type="Texture" id=2]
+[ext_resource path="res://addons/Behaviors/BehaviorFade2D.gd" type="Script" id=3]
+[ext_resource path="res://addons/Behaviors/iconfade.png" type="Texture" id=4]
+[ext_resource path="res://icon.png" type="Texture" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 28.177, 28.2878 )
+
+[node name="Player" type="Area2D" index="0" groups=[
+"PLAYER",
+]]
+
+modulate = Color( 1, 1, 1, 0.616226 )
+position = Vector2( 3.96168, -7.66679 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+_sections_unfolded = [ "Audio Bus", "Collision", "Transform", "Visibility", "Z Index" ]
+
+[node name="Behavior8Directions2D" type="Node2D" parent="." index="0"]
+
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+enabled = true
+max_speed = 400
+acceleration = 600
+deceleration = 500
+directions = 3
+angles = 2
+default_controls = true
+control_left = "ui_left"
+control_right = "ui_right"
+control_up = "ui_up"
+control_down = "ui_down"
+solid_group_name = "SOLID"
+
+[node name="BehaviorFade2D" type="Node2D" parent="." index="1"]
+
+script = ExtResource( 3 )
+__meta__ = {
+"_editor_icon": ExtResource( 4 )
+}
+active_at_start = false
+start_with_fade_in = true
+min_opacity = 0.2
+max_opacity = 0.8
+fade_in_time = 0.5
+wait_in_time = 0.2
+fade_out_time = 0.5
+wait_out_time = 0.0
+destroy = false
+repeat = true
+
+[node name="Sprite" type="Sprite" parent="." index="2"]
+
+texture = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
+
+shape = SubResource( 1 )
+
+

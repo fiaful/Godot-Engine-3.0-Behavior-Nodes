@@ -1,0 +1,109 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://addons/Behaviors/BehaviorLives2D.gd" type="Script" id=1]
+[ext_resource path="res://addons/Behaviors/iconlives.png" type="Texture" id=2]
+[ext_resource path="res://test/life_empty.png" type="Texture" id=3]
+[ext_resource path="res://test/life_first.png" type="Texture" id=4]
+[ext_resource path="res://test/life_half.png" type="Texture" id=5]
+[ext_resource path="res://test/life_last.png" type="Texture" id=6]
+[ext_resource path="res://test/life_full.png" type="Texture" id=7]
+[ext_resource path="res://addons/Behaviors/BehaviorFade2D.gd" type="Script" id=8]
+[ext_resource path="res://addons/Behaviors/iconfade.png" type="Texture" id=9]
+[ext_resource path="res://addons/Behaviors/BehaviorEvidence2D.gd" type="Script" id=10]
+[ext_resource path="res://addons/Behaviors/iconevidence.png" type="Texture" id=11]
+[ext_resource path="res://test/akaDylan.ttf" type="DynamicFontData" id=12]
+
+[sub_resource type="DynamicFont" id=1]
+
+size = 22
+use_mipmaps = false
+use_filter = false
+font_data = ExtResource( 12 )
+_sections_unfolded = [ "Font", "Settings" ]
+
+[node name="Lives" type="Node2D"]
+
+_sections_unfolded = [ "Transform" ]
+
+[node name="BehaviorLives2D" type="Node2D" parent="." index="0"]
+
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+lives_mode = 2
+texture_empty = ExtResource( 3 )
+texture_first_quarter = ExtResource( 4 )
+texture_half = ExtResource( 5 )
+texture_last_quarter = ExtResource( 6 )
+texture_full = ExtResource( 7 )
+offset_x = 0
+lives_number = 4.0
+max_visible_lives = 4
+max_lives = 5
+current_visible_lives = 3
+auto_label = true
+use_label = true
+label_text_prefix = ""
+label_text_padding = 2
+label = "../MulLabel"
+fade_on_last = true
+fade_behavior_node = "../BehaviorFade2D"
+evidence_behavior_node = "../BehaviorEvidence2D"
+
+[node name="BehaviorFade2D" type="Node2D" parent="." index="1"]
+
+script = ExtResource( 8 )
+__meta__ = {
+"_editor_icon": ExtResource( 9 )
+}
+active_at_start = false
+start_with_fade_in = false
+min_opacity = 0.0
+max_opacity = 1.0
+fade_in_time = 0.5
+wait_in_time = 0.0
+fade_out_time = 0.5
+wait_out_time = 0.0
+destroy = false
+repeat = true
+
+[node name="BehaviorEvidence2D" type="Position2D" parent="." index="2"]
+
+position = Vector2( -0.969543, 16.6205 )
+script = ExtResource( 10 )
+__meta__ = {
+"_editor_icon": ExtResource( 11 )
+}
+duration = 1.0
+start_color = Color( 1, 1, 1, 1 )
+finish_color = Color( 1, 1, 1, 0 )
+scale_offset = Vector2( 0.3, 0.3 )
+position_offset = Vector2( 0, 0 )
+duplicate = true
+
+[node name="MulLabel" type="Label" parent="." index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -29.0
+margin_top = 20.0
+margin_right = 32.0
+margin_bottom = 53.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 1 )
+text = "04"
+align = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "custom_fonts" ]
+
+

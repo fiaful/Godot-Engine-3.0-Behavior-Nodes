@@ -1,0 +1,389 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://test/Test.gd" type="Script" id=1]
+[ext_resource path="res://test/Item.tscn" type="PackedScene" id=2]
+[ext_resource path="res://test/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://test/akaDylan.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://test/Label.gd" type="Script" id=5]
+[ext_resource path="res://addons/Behaviors/BehaviorScoreLabel.gd" type="Script" id=6]
+[ext_resource path="res://addons/Behaviors/iconscorelabel.png" type="Texture" id=7]
+[ext_resource path="res://addons/Behaviors/BehaviorEvidence2D.gd" type="Script" id=8]
+[ext_resource path="res://addons/Behaviors/iconevidence.png" type="Texture" id=9]
+[ext_resource path="res://test/Lives.tscn" type="PackedScene" id=10]
+[ext_resource path="res://icon.png" type="Texture" id=11]
+
+[sub_resource type="DynamicFont" id=1]
+
+size = 64
+use_mipmaps = false
+use_filter = false
+extra_spacing_char = 10
+font_data = ExtResource( 4 )
+_sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
+
+[node name="Test" type="Node"]
+
+script = ExtResource( 1 )
+
+[node name="Item" parent="." index="0" instance=ExtResource( 2 )]
+
+position = Vector2( 723.546, 360.111 )
+
+[node name="Item2" parent="." index="1" instance=ExtResource( 2 )]
+
+position = Vector2( 801.108, 243.768 )
+
+[node name="Item3" parent="." index="2" instance=ExtResource( 2 )]
+
+position = Vector2( 645.984, 216.067 )
+
+[node name="Item4" parent="." index="3" instance=ExtResource( 2 )]
+
+position = Vector2( 315.79, 167.313 )
+
+[node name="Item5" parent="." index="4" instance=ExtResource( 2 )]
+
+position = Vector2( 160.665, 273.684 )
+
+[node name="Item6" parent="." index="5" instance=ExtResource( 2 )]
+
+position = Vector2( 472.022, 356.787 )
+
+[node name="Item7" parent="." index="6" instance=ExtResource( 2 )]
+
+position = Vector2( 959.557, 162.881 )
+
+[node name="Player" parent="." index="7" instance=ExtResource( 3 )]
+
+modulate = Color( 1, 1, 1, 0.260461 )
+position = Vector2( 511.299, 204.359 )
+
+[node name="Button" type="Button" parent="." index="8"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 83.0
+margin_top = 500.0
+margin_right = 159.0
+margin_bottom = 535.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 1
+
+[node name="Button2" type="Button" parent="." index="9"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 198.0
+margin_top = 500.0
+margin_right = 274.0
+margin_bottom = 535.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 1
+
+[node name="Button3" type="Button" parent="." index="10"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 313.0
+margin_top = 500.0
+margin_right = 389.0
+margin_bottom = 535.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 1
+
+[node name="Button4" type="Button" parent="." index="11"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 653.0
+margin_top = 500.0
+margin_right = 729.0
+margin_bottom = 535.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 1
+
+[node name="Button5" type="Button" parent="." index="12"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 769.0
+margin_top = 500.0
+margin_right = 845.0
+margin_bottom = 535.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 1
+
+[node name="Button6" type="Button" parent="." index="13"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 881.0
+margin_top = 500.0
+margin_right = 957.0
+margin_bottom = 535.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 1
+
+[node name="Label" type="Label" parent="." index="14"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 19.0
+margin_top = 6.0
+margin_right = 390.0
+margin_bottom = 96.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.232016, 0.746094, 0.12532, 1 )
+text = "9999"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+script = ExtResource( 5 )
+_sections_unfolded = [ "Rect", "Visibility", "custom_colors", "custom_fonts" ]
+
+[node name="BehaviorScoreLabel" type="Control" parent="Label" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -18.0
+margin_top = -5.0
+margin_right = 22.0
+margin_bottom = 35.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+script = ExtResource( 6 )
+__meta__ = {
+"_editor_icon": ExtResource( 7 )
+}
+score = 0
+animate = true
+increment_wait = 0.01
+increment_step = 34
+padding_length = 4
+can_be_less_than_0 = true
+evidence_score = true
+evidence_at = 3000
+extralife_at = 6000
+hi_score_node = ""
+lives_behavior_node = "/root/Test/Lives/BehaviorLives2D"
+evidence_behavior_node = "../BehaviorEvidence2D"
+
+[node name="BehaviorEvidence2D" type="Position2D" parent="Label" index="1"]
+
+position = Vector2( 120, 51 )
+script = ExtResource( 8 )
+__meta__ = {
+"_editor_icon": ExtResource( 9 )
+}
+duration = 0.5
+start_color = Color( 1, 1, 1, 1 )
+finish_color = Color( 1, 1, 1, 0 )
+scale_offset = Vector2( 0.3, 0.5 )
+position_offset = Vector2( 0, 0 )
+duplicate = true
+
+[node name="Label2" type="Label" parent="." index="15"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 397.0
+margin_top = 6.0
+margin_right = 768.0
+margin_bottom = 96.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.232016, 0.746094, 0.12532, 1 )
+text = "9999"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+script = ExtResource( 5 )
+_sections_unfolded = [ "Rect", "Visibility", "custom_colors", "custom_fonts" ]
+
+[node name="BehaviorScoreLabel" type="Control" parent="Label2" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -18.0
+margin_top = -5.0
+margin_right = 22.0
+margin_bottom = 35.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+script = ExtResource( 6 )
+__meta__ = {
+"_editor_icon": ExtResource( 7 )
+}
+score = 2500
+animate = true
+increment_wait = 0.01
+increment_step = 34
+padding_length = 4
+can_be_less_than_0 = true
+evidence_score = true
+evidence_at = 2500
+extralife_at = 0
+hi_score_node = ""
+lives_behavior_node = ""
+evidence_behavior_node = ""
+
+[node name="Lives" parent="." index="16" instance=ExtResource( 10 )]
+
+position = Vector2( 846.872, 39.3324 )
+scale = Vector2( 1.36773, 1.25035 )
+
+[node name="Sprite" type="Sprite" parent="." index="17"]
+
+position = Vector2( 263.978, 786.903 )
+scale = Vector2( 0.767183, 0.716344 )
+texture = ExtResource( 11 )
+region_enabled = true
+region_rect = Rect2( 0, 32, 640, 480 )
+_sections_unfolded = [ "Region" ]
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Sprite" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 481.0
+margin_top = 3.0
+margin_right = 710.0
+margin_bottom = 141.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+texture = ExtResource( 11 )
+region_rect = Rect2( 0, 0, 128, 64 )
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+_sections_unfolded = [ "Axis Stretch", "Patch Margin" ]
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+
+[connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]
+
+[connection signal="pressed" from="Button3" to="." method="_on_Button3_pressed"]
+
+[connection signal="pressed" from="Button4" to="." method="_on_Button4_pressed"]
+
+[connection signal="pressed" from="Button5" to="." method="_on_Button5_pressed"]
+
+[connection signal="pressed" from="Button6" to="." method="_on_Button6_pressed"]
+
+[connection signal="evidence_start" from="Label/BehaviorEvidence2D" to="Label" method="_on_BehaviorEvidence2D_evidence_start"]
+
+

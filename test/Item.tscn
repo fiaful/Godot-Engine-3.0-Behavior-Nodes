@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://addons/Behaviors/BehaviorTakeItem2D.gd" type="Script" id=2]
+[ext_resource path="res://addons/Behaviors/icontakeitem.png" type="Texture" id=3]
+[ext_resource path="res://test/destroy.wav" type="AudioStream" id=4]
+[ext_resource path="res://addons/Behaviors/BehaviorEvidence2D.gd" type="Script" id=5]
+[ext_resource path="res://addons/Behaviors/iconevidence.png" type="Texture" id=6]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 59.9087, 61.8122 )
+
+[node name="Item" type="Area2D"]
+
+scale = Vector2( 0.5, 0.5 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+_sections_unfolded = [ "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="0"]
+
+scale = Vector2( 0.5, 0.5 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="." index="1"]
+
+modulate = Color( 0.957031, 0.0971985, 0.0971985, 1 )
+texture = ExtResource( 1 )
+_sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
+
+[node name="BehaviorTakeItem2D" type="Node2D" parent="." index="2"]
+
+script = ExtResource( 2 )
+__meta__ = {
+"_editor_icon": ExtResource( 3 )
+}
+enabled = true
+score = 1000
+life = 0
+destroy = true
+auto_take_by_group = true
+auto_take_groups = PoolStringArray( "PLAYER" )
+audio_sample = ExtResource( 4 )
+auto_increment_score = "/root/Test/Label/BehaviorScoreLabel"
+auto_increment_life = ""
+evidence_behavior_node = "../BehaviorEvidence2D"
+
+[node name="BehaviorEvidence2D" type="Position2D" parent="." index="3"]
+
+script = ExtResource( 5 )
+__meta__ = {
+"_editor_icon": ExtResource( 6 )
+}
+duration = 0.5
+start_color = Color( 1, 1, 1, 1 )
+finish_color = Color( 1, 1, 1, 0 )
+scale_offset = Vector2( 0.5, 0.5 )
+position_offset = Vector2( 0, -50 )
+duplicate = false
+
+
