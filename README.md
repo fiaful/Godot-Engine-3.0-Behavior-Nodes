@@ -44,17 +44,18 @@ Per qualsiasi informazione, domanda o idea vogliate proporre, scrivetemi! e mi r
 
 (translated with the google translator)
 
-As the title briefly says, this project has the ambition to become the link between Godot and the tools for the development of no-coding videogames (for example Construct 2/3, ClickTeam Fusion 2.5, etc.)
+As the title briefly says, this project has the ambition to become the link between Godot and the tools for the development of videogames without coding (for example Construct 2/3, ClickTeam Fusion 2.5, etc.)
 
 Being able to enter into the code of what is happening allows an otherwise unattainable power (of course, I'm not saying anything new), however being able to create a working prototype of the idea we have in mind in a few steps is something that raises the motivation and productivity at levels never seen before (this is where the previously mentioned tools are placed).
 
 As an example, from now on, I will only refer to Construct 2 and ClickTeam Fusion 2.5.
 
-Both these products have - as it should be - a development environment heavily focused on their characteristics (for example, both have a tool, more or less valid, for editing images that make up sprites, which allows you to create very prototypes quickly). Both have a drag-and-drop approach, both as regards the positioning of objects in the work area, and as regards the writing of the "code".
+Both these products have - as it should be - a development environment heavily focused on their characteristics (for example, both have a tool, more or less valid, for editing images that make up sprites, which allows you to create very prototypes quickly).
+Both have a drag-and-drop approach, both as regards the positioning of objects in the work area, and as regards the writing of the "code".
 
 While ClickTeamFusion 2.5 has a series of exporters (purchased separately) in order to publish their work on various platforms in native code, Construct 2 only produces HTML5 games (so to be able to bring them on the various platforms then special wrappers, such as nwjs for desktop or cordova for furniture.
 
-The strength of these tools lies not only in providing, as a basis, a great set of tools ready to use, to be added to the scene, which fit together to produce, quickly, something working, but above all in the possibility of create and add new ones (both have behind the very lively communities that have produced so many additional components).
+The strength of these tools is * not only * in providing, basically, a great set of tools ready to use, to be added to the scene, that fit together to produce, quickly, something working, but especially in the possibility of creating and adding new ones (both have behind the very lively communities that have really produced many additional components).
 
 Moreover Construct 2 introduces a very interesting aspect, that is the possibility of adding behaviors to basic objects (for example I can add a Platform-Movement behavior to a sprite type object and, by running the project, see it move immediately to the pressure of the cursor movement keys and jump by pressing the space bar - of course every aspect of the behavior is configurable - and I can add to other sprite objects the Solid behavior so that my sprite player, equipped with Platform-Movement, will stop automatically going to run into it, all without writing a single line of code).
 
@@ -73,7 +74,7 @@ The key points of the project will be:
   - all free and opensource (anyone can put his hand to the code to adapt it to their needs - everyone is * invited * to publish any bugfixes to the community)
   - each behavior node must be added as a sub-node of the node to which the behavior is to be added
   - all the configuration parameters of the behavior will have to be exposed (nobody will have to modify the code just to change the parameters)
-  
+
 Anyone can join the project at any time! the greater the number of behaviors we can provide, the faster the prototyping will be!
 
 Beyond the idea that can like it or not, as a programmer I'm pretty rusty ... so wherever you see that there are room for improvement in what I write (especially in terms of performance) correct me quietly!
