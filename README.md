@@ -53,7 +53,7 @@ As an example, from now on, I will only refer to Construct 2 and ClickTeam Fusio
 Both these products have - as it should be - a development environment heavily focused on their characteristics (for example, both have a tool, more or less valid, for editing images that make up sprites, which allows you to create very prototypes quickly).
 Both have a drag-and-drop approach, both as regards the positioning of objects in the work area, and as regards the writing of the "code".
 
-While ClickTeamFusion 2.5 has a series of exporters (purchased separately) in order to publish their work on various platforms in native code, Construct 2 only produces HTML5 games (so to be able to bring them on the various platforms then special wrappers, such as nwjs for desktop or cordova for furniture.
+While ClickTeamFusion 2.5 has a series of exporters (purchased separately) in order to publish their work on various platforms in native code, Construct 2 only produces HTML5 games (so to be able to bring them on the various platforms then special wrappers, such as nwjs for desktop or cordova for mobile.
 
 The strength of these tools is * not only * in providing, basically, a great set of tools ready to use, to be added to the scene, that fit together to produce, quickly, something working, but especially in the possibility of creating and adding new ones (both have behind the very lively communities that have really produced many additional components).
 
@@ -80,3 +80,5 @@ Anyone can join the project at any time! the greater the number of behaviors we 
 Beyond the idea that can like it or not, as a programmer I'm pretty rusty ... so wherever you see that there are room for improvement in what I write (especially in terms of performance) correct me quietly!
 
 For any information, question or idea, please, write to me! and I recommend to comment on the code!
+
+(to be reviewed: automatic translation is horrible)
