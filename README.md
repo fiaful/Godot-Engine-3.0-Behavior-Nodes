@@ -70,9 +70,9 @@ This project, really ambitious, wants to give the developer the possibility to a
 
 The key points of the project will be:
   - use of the GDScript only for the code of the behavior nodes (a single language that is the same used to write the game)
-  - all free and opensource (anyone can put his hand to the code to adapt it to their needs - everyone is * invited * to publish any bugfixes to the community)
-  - each behavior node must be added as a sub-node of the node to which the behavior is to be added
-  - all the configuration parameters of the behavior will have to be exposed (nobody will have to modify the code just to change the parameters)
+  - all free and opensource (anyone can put his hand to the code to adapt it to their needs - everyone is * invited * to publish any bugfixes to the community)
+  - each behavior node must be added as a sub-node of the node to which the behavior is to be added
+  - all the configuration parameters of the behavior will have to be exposed (nobody will have to modify the code just to change the parameters)
   
 Anyone can join the project at any time! the greater the number of behaviors we can provide, the faster the prototyping will be!
 
