@@ -1,8 +1,10 @@
-tool
 extends "res://addons/Behaviors/BaseBehavior.gd"
+
+const to_deg = (180.0 / PI)
 
 enum BEHAVIOR_8_DIRECTIONS { _UP_DOWN, _LEFT_RIGHT, _4_DIRECTIONS, _8_DIRECTIONS }
 enum BEHAVIOR_8_DIRECTIONS_ANGLES { _NONE, _90_DEGREE_INTERVALS, _45_DEGREE_INTERVALS, _360_DEGREE_SMOOTH }
+enum BEHAVIOR_8_DIRECTIONS_MOVE_TYPE { _SLIDE, _COLLIDE }
 
 export var enabled = true
 export var max_speed = 200
@@ -10,12 +12,13 @@ export var acceleration = 600
 export var deceleration = 500
 export(BEHAVIOR_8_DIRECTIONS) var directions = BEHAVIOR_8_DIRECTIONS._8_DIRECTIONS
 export(BEHAVIOR_8_DIRECTIONS_ANGLES) var angles = BEHAVIOR_8_DIRECTIONS_ANGLES._360_DEGREE_SMOOTH
+export(BEHAVIOR_8_DIRECTIONS_MOVE_TYPE) var move_type = BEHAVIOR_8_DIRECTIONS_MOVE_TYPE._SLIDE
+export var auto_mirror = true			# funziona solo se directions = _LEFT_RIGHT e angles = _NONE
 export var default_controls = true
 export var control_left = "ui_left"
 export var control_right = "ui_right"
 export var control_up = "ui_up"
 export var control_down = "ui_down"
-export var solid_group_name = "SOLID"
 
 var _parent = null
 
@@ -32,54 +35,55 @@ var _simdown = false
 var _simleft = false
 var _simright = false
 
-# attempted workaround for sticky keys bug
-var _lastuptick = -1
-var _lastdowntick = -1
-var _lastlefttick = -1
-var _lastrighttick = -1
+var _orient_left = false
 
-# Movement
-var _dx = 0
-var _dy = 0
-
-var _oldx = 0
-var _oldy = 0
-var _oldangle = 0
-
-###############################################
-var _overlapping_areas
-var _overlapping_bodies
-var _candidates = []
-###############################################
+var current_velocity = Vector2()
+var current_direction = Vector2()
+var left = false
+var right = false
+var up = false
+var down = false
 
 func _ready():
 	_class_name = "Behavior8Directions2D"
 	_parent = get_parent()
-	_parent.connect("area_entered", self, "_on_area_entered")
-	_parent.connect("body_entered", self, "_on_body_entered")
-	
+	_parent.rotation_degrees = 0
 	set_process(false)
 	set_physics_process(true)
 
 func to_JSON():
 	return {
-		"dx": _dx,
-		"dy": _dy,
 		"enabled": enabled,
 		"maxspeed": max_speed,
 		"acc": acceleration,
 		"dec": deceleration,
-		"ignore": _ignore_input
+		"ignore": _ignore_input,
+		"dir": directions,
+		"angles": angles,
+		"movetype": move_type,
+		"curvel": current_velocity,
+		"curdir": current_direction,
+		"left": left,
+		"right": right,
+		"up": up,
+		"down": down
 	}
 	
 func from_JSON(o):
-	_dx = o["dx"]
-	_dy = o["dy"]
 	enabled = o["enabled"]
 	max_speed = o["maxspeed"]
 	acceleration = o["acc"]
 	deceleration = o["dec"]
 	_ignore_input = o["ignore"]
+	directions = o["dir"]
+	angles = o["angles"]
+	move_type = o["movetype"]
+	current_velocity = o["curvel"]
+	current_direction = o["curdir"]
+	left = o["left"]
+	right = o["right"]
+	up = o["up"]
+	down = o["down"]
 	
 	_upkey = false
 	_downkey = false
@@ -91,40 +95,65 @@ func from_JSON(o):
 	_simleft = false
 	_simright = false
 	
-	_lastuptick = -1
-	_lastdowntick = -1
-	_lastlefttick = -1
-	_lastrighttick = -1
-
+#func _process(delta):
 func _physics_process(delta):
-	_process_input(delta)
+	if !enabled:
+		return
+		
+	_process_input()
+	_filter_directions()
+	var coll
+	if move_type == BEHAVIOR_8_DIRECTIONS_MOVE_TYPE._SLIDE:
+		var v = _set_velocity_and_direction()
+		current_velocity = _parent.move_and_slide(v)
+	else:
+		var v = _set_velocity_and_direction() * delta
+		coll = _parent.move_and_collide(v)
+		if coll:
+			current_velocity = Vector2(0, 0)
+	_rotate()
 
-	var left = _leftkey or _simleft
-	var right = _rightkey or _simright
-	var up = _upkey or _simup
-	var down = _downkey or _simdown
+	
+func _process_input():
+	if Input.is_action_pressed(control_left):
+		_leftkey = true
+	if Input.is_action_pressed(control_right):
+		_rightkey = true
+		
+	if Input.is_action_pressed(control_up):
+		_upkey = true
+	if Input.is_action_pressed(control_down):
+		_downkey = true
+		
+	if Input.is_action_just_released(control_left):
+		_leftkey = false
+	if Input.is_action_just_released(control_right):
+		_rightkey = false
+		
+	if Input.is_action_just_released(control_up):
+		_upkey = false
+	if Input.is_action_just_released(control_down):
+		_downkey = false
+		
+	left = _leftkey or _simleft
+	right = _rightkey or _simright
+	up = _upkey or _simup
+	down = _downkey or _simdown
 	_simleft = false
 	_simright = false
 	_simup = false
 	_simdown = false
-	
-	if !enabled:
-		return
-	
-	var collobj
-#	collobj = test_overlap_solid(_parent)
-#	if collobj:
-##		# this.runtime.registerCollision(this.inst, collobj);
-#		if !push_out_solid_nearest(_parent, 10):
-#			return		# must be stuck in solid
-	
+		
 	# Ignoring input: ignore all keys
 	if _ignore_input:
 		left = false
 		right = false
 		up = false
 		down = false
-		
+
+#	print (left, " ", right, " ", up, " ", down)
+
+func _filter_directions():
 	# Up & down mode: ignore left & right keys
 	if directions == BEHAVIOR_8_DIRECTIONS._UP_DOWN:
 		left = false
@@ -138,384 +167,159 @@ func _physics_process(delta):
 	# 4 directions mode: up/down take priority over left/right
 	if directions == BEHAVIOR_8_DIRECTIONS._4_DIRECTIONS and (up or down):
 		left = false
-		right = false
-		
-	# Apply deceleration when no arrow key pressed, for each axis
-	if left == right:	# both up or both down
-		if _dx < 0:
-			_dx += deceleration * delta
-			
-			if _dx > 0:
-				_dx = 0
-		elif _dx > 0:
-			_dx -= deceleration * delta
-			
-			if _dx < 0:
-				_dx = 0
-		
-	if up == down:
-		if _dy < 0:
-			_dy += deceleration * delta
-			
-			if _dy > 0:
-				_dy = 0
-		elif _dy > 0:
-			_dy -= deceleration * delta
-			
-			if _dy < 0:
-				_dy = 0
-				
-	# Apply acceleration
-	if left and !right:
-		# Moving in opposite direction to current motion: add deceleration
-		if _dx > 0:
-			_dx -= (acceleration + deceleration) * delta
-		else:
-			_dx -= acceleration * delta
-	
-	if right and !left:
-		if _dx < 0:
-			_dx += (acceleration + deceleration) * delta
-		else:
-			_dx += acceleration * delta
-	
-	if up and !down:
-		if _dy > 0:
-			_dy -= (acceleration + deceleration) * delta
-		else:
-			_dy -= acceleration * delta
-	
-	if down and !up:
-		if _dy < 0:
-			_dy += (acceleration + deceleration) * delta
-		else:
-			_dy += acceleration * delta
-	
-	var ax
-	var ay
+		right = false	
 
-	if _dx != 0 or _dy != 0:
-		# Limit to max speed
-		var speed = sqrt(_dx * _dx + _dy * _dy)
+func _set_velocity_and_direction():
+	# asse X
+	if left == right:								# se entrambi i comandi sinistra e destra sono attivi o disattivi
+													# vuol dire che mi devo fermare. quindi:
+		if current_velocity.x > 0:					# se sto andando verso destra ( > 0 )
+			current_velocity.x -= deceleration		# devo decelerare (decrementando)
+			if current_velocity.x < 0:				# fino a fermarmi
+				current_velocity.x = 0
+				
+		elif current_velocity.x < 0:				# se sto andando verso sinistra ( < 0 )
+			current_velocity.x += deceleration		# devo decelerare (incrementando)
+			if current_velocity.x > 0:				# fino a fermarmi
+				current_velocity.x = 0
+				
+	elif left and !right:							# voglio andare a sinistra
+
+		if current_velocity.x > 0:					# se stavo andando a destra
+			current_direction.x = 1
+			current_velocity.x -= deceleration + acceleration		# devo decelerare
+			if current_velocity.x < 0:
+				current_direction.x = -1
+		else:
+			_mirror()
+			current_direction.x = -1
+			current_velocity.x -= acceleration		# e quando arrivo a 0 iniziare ad accelerare
+			if current_velocity.x < -max_speed:
+				current_velocity.x = -max_speed		# però non posso accelerare oltre la velocità massima
+				
+	elif !left and right:							# voglio andare a destra
+
+		if current_velocity.x < 0:					# se stavo andando a sinistra
+			current_direction.x = -1
+			current_velocity.x += deceleration + acceleration		# devo decelerare
+			if current_velocity.x > 0:
+				current_direction.x = 1
+		else:
+			_mirror_back()
+			current_direction.x = 1
+			current_velocity.x += acceleration		# e quando arrivo a 0 iniziare ad accelerare
+			if current_velocity.x > max_speed:
+				current_velocity.x = max_speed		# però non posso accelerare oltre la velocità massima
 		
+	if current_velocity.x == 0:
+		current_direction.x = 0
+		
+	# stessa cosa per l'asse Y
+	if up == down:								# se entrambi i comandi su e giù sono attivi o disattivi
+													# vuol dire che mi devo fermare. quindi:
+		if current_velocity.y > 0:					# se sto andando verso su ( > 0 )
+			current_velocity.y -= deceleration		# devo decelerare (decrementando)
+			if current_velocity.y < 0:				# fino a fermarmi
+				current_velocity.y = 0
+				
+		elif current_velocity.y < 0:				# se sto andando verso giù ( < 0 )
+			current_velocity.y += deceleration		# devo decelerare (incrementando)
+			if current_velocity.y > 0:				# fino a fermarmi
+				current_velocity.y = 0
+			
+	elif up and !down:							# voglio andare su
+
+		if current_velocity.y > 0:					# se stavo andando giù
+			current_direction.y = 1
+			current_velocity.y -= deceleration + acceleration		# devo decelerare
+			if current_velocity.y < 0:
+				current_direction.y = -1
+		else:
+			current_direction.y = -1
+			current_velocity.y -= acceleration		# e quando arrivo a 0 iniziare ad accelerare
+			if current_velocity.y < -max_speed:
+				current_velocity.y = -max_speed		# però non posso accelerare oltre la velocità massima
+				
+	elif !up and down:							# voglio andare giù
+
+		if current_velocity.y < 0:					# se stavo andando su
+			current_direction.y = -1
+			current_velocity.y += deceleration + acceleration		# devo decelerare
+			if current_velocity.y > 0:
+				current_direction.y = 1
+		else:
+			current_direction.y = 1
+			current_velocity.y += acceleration		# e quando arrivo a 0 iniziare ad accelerare
+			if current_velocity.y > max_speed:
+				current_velocity.y = max_speed		# però non posso accelerare oltre la velocità massima
+
+	if current_velocity.y == 0:
+		current_direction.y = 0
+
+	if current_velocity.x != 0 or current_velocity.y != 0:
+		# Limit to max speed
+		var speed = sqrt(current_velocity.x * current_velocity.x + current_velocity.y * current_velocity.y)
+
 		if speed > max_speed:
 			# Limit vector magnitude to maxspeed
-			var a = atan2(_dy, _dx)
-			_dx = max_speed * cos(a)
-			_dy = max_speed * sin(a)
-		
-		# Save old position and angle
-		_oldx = _parent.global_position.x
-		_oldy = _parent.global_position.y
-		_oldangle = _parent.rotation_degrees
-		
-		# Attempt X movement
-		_parent.global_position.x += _dx * delta
-		
-#		collobj = test_overlap_solid(_parent)
-#		if collobj:
-##			# Try to push back out horizontally for a closer fit to the obstacle.
-#			if push_out_solid(_parent, 1 if _dx < 0 else -1, 0, abs(floor(_dx * delta))):
-##				# Failed to push out: restore previous (known safe) position.
-#				_parent.global_position.x = _oldx
-##
-#			_dx = 0;
-##			#this.runtime.registerCollision(this.inst, collobj);
-		
-		_parent.global_position.y += _dy * delta
-		
-#		collobj = test_overlap_solid(_parent)
-#		if collobj:
-##			# Try to push back out vertically.
-#			if push_out_solid(_parent, 0, 1 if _dy < 0 else -1, abs(floor(_dy * delta))):
-##				# Failed to push out
-#				_parent.global_position.y = _oldy
-##
-#			_dy = 0
-##			#this.runtime.registerCollision(this.inst, collobj);
-		
-		ax = round6(_dx)
-		ay = round6(_dy)
-		
-		# Apply angle so long as object is still moving and isn't entirely blocked by a solid
-		if (ax != 0 or ay != 0): # and is_roteable
-			if angles == BEHAVIOR_8_DIRECTIONS_ANGLES._90_DEGREE_INTERVALS:
-				_parent.rotation_degrees = (round(to_degrees(atan2(ay, ax)) / 90.0) * 90.0)
-			elif angles == BEHAVIOR_8_DIRECTIONS_ANGLES._45_DEGREE_INTERVALS:
-				_parent.rotation_degrees = (round(to_degrees(atan2(ay, ax)) / 45.0) * 45.0)
-			elif angles == BEHAVIOR_8_DIRECTIONS_ANGLES._360_DEGREE_SMOOTH:
-				_parent.rotation_degrees = round(to_degrees(atan2(ay, ax)))
-			
-#		if _parent.rotation_degrees != oldangle:
-#			collobj = test_overlap_solid(_parent)
-#			if collobj:
-#				_parent.rotation_degrees = oldangle
-#				#this.runtime.registerCollision(this.inst, collobj);
-	_candidates.clear()
-	
-	
-func _process_input(delta):
-	#var tick_count = delta
-	if Input.is_action_pressed(control_left):# and _lastlefttick < tick_count:
-		_leftkey = true
-	if Input.is_action_pressed(control_right):# and _lastrighttick < tick_count:
-		_rightkey = true
-	if Input.is_action_pressed(control_up):# and _lastuptick < tick_count:
-		_upkey = true
-	if Input.is_action_pressed(control_down):# and _lastdowntick < tick_count:
-		_downkey = true
-	if Input.is_action_just_released(control_left):
-		_leftkey = false
-		#_lastlefttick = tick_count
-	if Input.is_action_just_released(control_right):
-		_rightkey = false
-		#_lastrighttick = tick_count
-	if Input.is_action_just_released(control_up):
-		_upkey = false
-		#_lastuptick = tick_count
-	if Input.is_action_just_released(control_down):
-		_downkey = false
-		#_lastdowntick = tick_count
+			var a = atan2(current_velocity.y, current_velocity.x)
+			current_velocity.x = max_speed * cos(a)
+			current_velocity.y = max_speed * sin(a)
 
-func _on_area_entered(area):
-	if area.is_in_group(solid_group_name):
-		_candidates.append(area)
-		push_out_solid_nearest(_parent, 10)
-		_dx = 0
-		_dy = 0
-		
-func _on_body_entered(body):
-	if body.is_in_group(solid_group_name):
-		_candidates.append(body)
-		push_out_solid_nearest(_parent, 10)
-		_dx = 0
-		_dy = 0
+	# restituisco un vettore dato dalla direzione normalizzata moltiplicato i valori assoluti delle velocità
+
+	return current_direction.normalized() * Vector2(abs(current_velocity.x), abs(current_velocity.y))
+
+func _rotate():
+	# Apply angle so long as object is still moving and isn't entirely blocked by a solid
+	if (current_velocity.x != 0 or current_velocity.y != 0): # and is_roteable
+		if angles == BEHAVIOR_8_DIRECTIONS_ANGLES._90_DEGREE_INTERVALS:
+			_parent.rotation_degrees = (round(atan2(current_velocity.y, current_velocity.x) * to_deg / 90.0) * 90.0)
+		elif angles == BEHAVIOR_8_DIRECTIONS_ANGLES._45_DEGREE_INTERVALS:
+			_parent.rotation_degrees = (round(atan2(current_velocity.y, current_velocity.x) * to_deg / 45.0) * 45.0)
+		elif angles == BEHAVIOR_8_DIRECTIONS_ANGLES._360_DEGREE_SMOOTH:
+			_parent.rotation_degrees = round(atan2(current_velocity.y, current_velocity.x) * to_deg)
+
+func _mirror():
+	if directions == BEHAVIOR_8_DIRECTIONS._LEFT_RIGHT and angles == BEHAVIOR_8_DIRECTIONS_ANGLES._NONE:
+		if _orient_left:
+			_orient_left = false
+			_parent.scale.x *= -1
+	if directions == BEHAVIOR_8_DIRECTIONS._UP_DOWN and angles == BEHAVIOR_8_DIRECTIONS_ANGLES._NONE:
+		if _orient_left:
+			_orient_left = false
+			_parent.scale.y *= -1
+
+func _mirror_back():
+	if directions == BEHAVIOR_8_DIRECTIONS._LEFT_RIGHT and angles == BEHAVIOR_8_DIRECTIONS_ANGLES._NONE:
+		if !_orient_left:
+			_orient_left = true
+			_parent.scale.x *= -1
+	if directions == BEHAVIOR_8_DIRECTIONS._UP_DOWN and angles == BEHAVIOR_8_DIRECTIONS_ANGLES._NONE:
+		if !_orient_left:
+			_orient_left = true
+			_parent.scale.y *= -1
 
 func stop():
-	pass
+	current_velocity = Vector2()
+	current_direction = Vector2()
 	
-func reverse():
-	pass
-
-func set_ignoring_input():
-	pass
-	
-func set_speed():
-	pass
-	
-func set_max_speed():
-	pass
-	
-func set_acceleration():
-	pass
-	
-func set_deceleration():
-	pass
-	
-func simulate_control():
-	pass
-	
-func set_enabled():
-	pass
-	
-func set_vector_x():
-	pass
-	
-func set_vector_y():
-	pass
-	
-func set_vector():
-	pass
-	
-func get_speed():
-	pass
-	
-func get_max_speed():
-	pass
-	
-func get_acceleration():
-	pass
-	
-func get_deceleration():
-	pass
-	
+func simulate_control(horizontal, vertical):
+	"""for horizontal: -1 = left; 0 = stop; 1 = right - for vertical: -1 = up; 0 = stop; 1 = down"""
+#	_simleft = false
+#	_simright = false
+#	_simup = false
+#	_simdown = false
+	if horizontal < 0:
+		_simleft = true
+	elif horizontal > 0:
+		_simright = true
+	if vertical < 0:
+		_simup = true
+	elif vertical > 0:
+		_simdown = true
+		
 func get_angle_of_motion():
-	pass
+	return _parent.rotation_degrees
 	
-func get_vector_x():
-	pass
-	
-func get_vector_y():
-	pass
-	
-func get_vector():
-	pass
-	
-##########################################
 
-func test_overlap(a, b):
-	var ret = false
-	if "overlaps_area" in a:
-		ret = ret or a.overlaps_area(b)
-	if "overlaps_body" in a:
-		ret = ret or a.overlaps_body(b)
-	return ret
-	
-##########################################
-
-func test_overlap_solid(inst):
-	if _candidates.size() <= 0:
-		return null
-	return _candidates[0]	
-
-##########################################
-
-func push_out_solid_nearest(inst, max_dist_):
-	var _parent = get_parent()
-	# Find nearest position not overlapping a solid
-	var max_dist = 100 if max_dist_ <= 0 else max_dist_
-	var dist = 0
-	var oldx = _parent.global_position.x
-	var oldy = _parent.global_position.y
-
-	var dir = 0
-	var dx = 0
-	var dy = 0
-	var last_overlapped = test_overlap_solid(_parent)
-	
-	if !last_overlapped:
-		return true
-			
-	# 8-direction spiral scan
-	while dist <= max_dist:
-		print (dist)
-		if dir == 0:
-			dx = 0
-			dy = -1
-			dist += 1
-		elif dir == 1:
-			dx = 1
-			dy = -1
-		elif dir == 2:
-			dx = 1
-			dy = 0
-		elif dir == 3:
-			dx = 1
-			dy = 1
-		elif dir == 4:
-			dx = 0
-			dy = 1
-		elif dir == 5:
-			dx = -1
-			dy = 1
-		elif dir == 6:
-			dx = -1
-			dy = 0
-		elif dir == 7:
-			dx = -1
-			dy = -1
-		
-		dir = (dir + 1) % 8
-		
-		_parent.global_position = Vector2(floor(oldx + (dx * dist)), floor(oldy + (dy * dist)))
-		
-		# Test if we've cleared the last instance we were overlapping
-		if "overlaps_area" in _parent:
-			if !_parent.overlaps_area(last_overlapped):
-				last_overlapped = null
-		elif "overlaps_body" in _parent:
-			if !_parent.operlaps_body(last_overlapped):
-				last_overlapped = null
-			
-		if !last_overlapped:
-			return true
-
-	# Didn't get pushed out: restore old position and return false
-	_parent.global_position = Vector2(oldx, oldy)
-	return false
-
-##########################################
-
-func push_out_solid(inst, xdir, ydir, dist, include_jumpthrus, specific_jumpthru):
-	print ("a")
-	# Push to try and move out of solid.  Pass -1, 0 or 1 for xdir and ydir to specify a push direction.
-	var push_dist = dist or 50
-
-	var oldx = inst.global_position.x
-	var oldy = inst.global_position.y;
-
-	var i
-	var last_overlapped = null
-	var secondlast_overlapped = null
-
-	for i in range(0, push_dist):
-		
-		inst.global_position = Vector2(oldx + (xdir * i), oldy + (ydir * i))
-		
-		# Test if we've cleared the last instance we were overlapping
-		if !test_overlap(inst, last_overlapped):
-			# See if we're still overlapping a different solid
-			last_overlapped = test_overlap_solid(inst)
-			
-			if last_overlapped:
-				secondlast_overlapped = last_overlapped
-			
-			# We're clear of all solids - check jumpthrus
-			if !last_overlapped:
-
-				if (include_jumpthrus):
-					if (specific_jumpthru):
-						last_overlapped = specific_jumpthru if test_overlap(inst, specific_jumpthru) else null
-					else:
-						last_overlapped = test_overlap_jump_thru(inst)
-						
-					if last_overlapped:
-						secondlast_overlapped = last_overlapped
-				
-				# Clear of both - completed push out.  Adjust fractionally to 1/16th of a pixel.
-				if !last_overlapped:
-					if secondlast_overlapped:
-						push_in_fractional(inst, xdir, ydir, secondlast_overlapped, 16)
-					
-					return true
-
-	# Didn't get out a solid: oops, we're stuck.
-	# Restore old position.
-	inst.global_position = Vector2(oldx, oldy)
-	return false
-
-##########################################
-
-func to_degrees(x):
-	return x * (180.0 / PI)
-
-func to_clamped_radians(x):
-	return clamp_angle(to_radians(x))
-	
-func clamp_angle(a):
-	# Clamp in radians
-	var p = a % (2 * PI)       # now in (-2pi, 2pi) range
-	if p < 0:
-		p += 2 * PI   # now in [0, 2pi) range
-	return p
-
-func to_radians(x):
-	return x / (180.0 / PI)
-
-func clamp_angle_degrees(a):
-	# Clamp in degrees
-	a = a % 360       # now in (-360, 360) range
-
-	if a < 0:
-		a += 360   # now in [0, 360) range
-
-	return a
-	
-##########################################
-
-
-func test_overlap_jump_thru(inst):
-	pass
-	
-func push_in_fractional(a, b, c, d, e):
-	pass
