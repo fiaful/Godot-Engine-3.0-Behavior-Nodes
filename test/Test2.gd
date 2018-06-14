@@ -1,5 +1,7 @@
 extends Node
 
+onready var dir8 = $Player/Behavior8Directions2D
+
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
@@ -9,3 +11,4 @@ func _ready():
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.
 #	pass
+

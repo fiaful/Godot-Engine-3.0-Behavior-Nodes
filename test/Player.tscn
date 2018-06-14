@@ -11,19 +11,16 @@
 custom_solver_bias = 0.0
 extents = Vector2( 28.177, 28.2878 )
 
-[node name="Player" type="Area2D" index="0" groups=[
+[node name="Player" type="KinematicBody2D" groups=[
 "PLAYER",
 ]]
 
 modulate = Color( 1, 1, 1, 0.616226 )
 position = Vector2( 3.96168, -7.66679 )
 input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
 _sections_unfolded = [ "Audio Bus", "Collision", "Transform", "Visibility", "Z Index" ]
 
 [node name="Behavior8Directions2D" type="Node2D" parent="." index="0"]
@@ -34,16 +31,17 @@ __meta__ = {
 }
 enabled = true
 max_speed = 400
-acceleration = 600
-deceleration = 500
-directions = 3
-angles = 2
+acceleration = 10
+deceleration = 8
+directions = 1
+angles = 0
+move_type = 1
+auto_mirror = true
 default_controls = true
 control_left = "ui_left"
 control_right = "ui_right"
 control_up = "ui_up"
 control_down = "ui_down"
-solid_group_name = "SOLID"
 
 [node name="BehaviorFade2D" type="Node2D" parent="." index="1"]
 
@@ -66,7 +64,13 @@ repeat = true
 
 texture = ExtResource( 5 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
+[node name="Sprite2" type="Sprite" parent="." index="3"]
+
+position = Vector2( -10.6241, 1.0666 )
+scale = Vector2( 0.261746, 0.252081 )
+texture = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="4"]
 
 shape = SubResource( 1 )
 
