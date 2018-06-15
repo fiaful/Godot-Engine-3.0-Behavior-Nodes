@@ -1,6 +1,7 @@
 extends Node
 
 onready var dir8 = $Player/Behavior8Directions2D
+onready var mover = $MoveToTest/BehaviorMoveTo2D
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -12,3 +13,6 @@ func _ready():
 #	# Update game logic here.
 #	pass
 
+func _input(event):
+	if event.is_pressed():
+		mover.start()

@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://test/Test2.gd" type="Script" id=1]
 [ext_resource path="res://test/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://test/life_full.png" type="Texture" id=3]
+[ext_resource path="res://test/MoveToTest.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/Behaviors/BehaviorMoveTo2D.gd" type="Script" id=5]
+[ext_resource path="res://addons/Behaviors/iconmoveto.png" type="Texture" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -85,5 +88,30 @@ shape_visible = true
 passby_press = false
 action = "ui_right"
 visibility_mode = 0
+
+[node name="MoveToTest" parent="." index="4" instance=ExtResource( 4 )]
+
+position = Vector2( 821.501, 426.577 )
+
+[node name="BehaviorMoveTo2D" type="Node2D" parent="MoveToTest" index="1"]
+
+script = ExtResource( 5 )
+__meta__ = {
+"_editor_icon": ExtResource( 6 )
+}
+enabled = true
+active_at_start = false
+object_mode = 0
+move_target = 0
+end_position = Vector2( -100, 0 )
+relative = true
+object_to_move = NodePath("../../Player")
+target_object = NodePath("../../Player")
+destroy_at_end = false
+destroy_behavior = false
+duration = 3.0
+trans_type = 6
+ease_type = 2
+delay = 0.0
 
 
