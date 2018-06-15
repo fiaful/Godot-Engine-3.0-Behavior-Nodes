@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://addons/Behaviors/Behavior8Directions2D.gd" type="Script" id=1]
-[ext_resource path="res://addons/Behaviors/icon8.png" type="Texture" id=2]
-[ext_resource path="res://addons/Behaviors/BehaviorFade2D.gd" type="Script" id=3]
-[ext_resource path="res://addons/Behaviors/iconfade.png" type="Texture" id=4]
-[ext_resource path="res://icon.png" type="Texture" id=5]
+[ext_resource path="res://addons/Behaviors/BehaviorMoveTo2D.gd" type="Script" id=1]
+[ext_resource path="res://addons/Behaviors/iconmoveto.png" type="Texture" id=2]
+[ext_resource path="res://addons/Behaviors/Behavior8Directions2D.gd" type="Script" id=3]
+[ext_resource path="res://addons/Behaviors/icon8.png" type="Texture" id=4]
+[ext_resource path="res://addons/Behaviors/BehaviorFade2D.gd" type="Script" id=5]
+[ext_resource path="res://addons/Behaviors/iconfade.png" type="Texture" id=6]
+[ext_resource path="res://icon.png" type="Texture" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -23,11 +25,32 @@ collision_mask = 1
 collision/safe_margin = 0.08
 _sections_unfolded = [ "Audio Bus", "Collision", "Transform", "Visibility", "Z Index" ]
 
-[node name="Behavior8Directions2D" type="Node2D" parent="." index="0"]
+[node name="BehaviorMoveTo2D" type="Node2D" parent="." index="0"]
 
 script = ExtResource( 1 )
 __meta__ = {
 "_editor_icon": ExtResource( 2 )
+}
+enabled = true
+active_at_start = false
+object_mode = null
+move_target = null
+end_position = Vector2( 0, 0 )
+relative = false
+object_to_move = null
+target_object = null
+destroy_at_end = false
+destroy_behavior = false
+duration = 1.0
+trans_type = null
+ease_type = null
+delay = 0.0
+
+[node name="Behavior8Directions2D" type="Node2D" parent="." index="1"]
+
+script = ExtResource( 3 )
+__meta__ = {
+"_editor_icon": ExtResource( 4 )
 }
 enabled = true
 max_speed = 400
@@ -43,11 +66,11 @@ control_right = "ui_right"
 control_up = "ui_up"
 control_down = "ui_down"
 
-[node name="BehaviorFade2D" type="Node2D" parent="." index="1"]
+[node name="BehaviorFade2D" type="Node2D" parent="." index="2"]
 
-script = ExtResource( 3 )
+script = ExtResource( 5 )
 __meta__ = {
-"_editor_icon": ExtResource( 4 )
+"_editor_icon": ExtResource( 6 )
 }
 active_at_start = false
 start_with_fade_in = true
@@ -60,18 +83,39 @@ wait_out_time = 0.0
 destroy = false
 repeat = true
 
-[node name="Sprite" type="Sprite" parent="." index="2"]
+[node name="Sprite" type="Sprite" parent="." index="3"]
 
-texture = ExtResource( 5 )
+texture = ExtResource( 7 )
 
-[node name="Sprite2" type="Sprite" parent="." index="3"]
+[node name="Sprite2" type="Sprite" parent="." index="4"]
 
 position = Vector2( -10.6241, 1.0666 )
 scale = Vector2( 0.261746, 0.252081 )
-texture = ExtResource( 5 )
+texture = ExtResource( 7 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="4"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="5"]
 
 shape = SubResource( 1 )
+
+[node name="Move" type="Node2D" parent="." index="6"]
+
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+enabled = true
+active_at_start = false
+object_mode = 0
+move_target = null
+end_position = Vector2( 0, 0 )
+relative = false
+object_to_move = null
+target_object = null
+destroy_at_end = false
+destroy_behavior = false
+duration = 1.0
+trans_type = 0
+ease_type = 0
+delay = 0.0
 
 

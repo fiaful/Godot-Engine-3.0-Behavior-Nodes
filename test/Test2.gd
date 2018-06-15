@@ -2,6 +2,7 @@ extends Node
 
 onready var dir8 = $Player/Behavior8Directions2D
 onready var mover = $MoveToTest/BehaviorMoveTo2D
+onready var swapper = $BehaviorSwap2D
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -15,4 +16,5 @@ func _ready():
 
 func _input(event):
 	if event.is_pressed():
-		mover.start()
+		# mover.start()
+		swapper.start()
