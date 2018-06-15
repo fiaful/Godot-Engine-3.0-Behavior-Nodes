@@ -11,6 +11,7 @@ func _enter_tree():
 	add_custom_type("BehaviorTakeItem2D", "Node2D", preload("BehaviorTakeItem2D.gd"), preload("icontakeitem.png"))
 	add_custom_type("BehaviorLives2D", "Node2D", preload("BehaviorLives2D.gd"), preload("iconlives.png"))
 	add_custom_type("BehaviorEvidence2D", "Position2D", preload("BehaviorEvidence2D.gd"), preload("iconevidence.png"))
+	add_custom_type("BehaviorMoveTo2D", "Node2D", preload("BehaviorMoveTo2D.gd"), preload("iconmoveto.png"))
 
 	add_custom_type("BehaviorScoreLabel", "Control", preload("BehaviorScoreLabel.gd"), preload("iconscorelabel.png"))
 
@@ -22,6 +23,7 @@ func _exit_tree():
 	remove_custom_type("BehaviorTakeItem2D")
 	remove_custom_type("BehaviorLives2D")
 	remove_custom_type("BehaviorEvidence2D")
+	remove_custom_type("BehaviorMoveTo2D")
 	
 	remove_custom_type("BehaviorScoreLabel")
 	
