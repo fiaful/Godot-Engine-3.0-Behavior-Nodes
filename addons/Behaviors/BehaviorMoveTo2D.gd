@@ -54,7 +54,7 @@ export var relative = false
 # if object mode is another object, this indicates the node path of object to move
 export(NodePath) var object_to_move
 
-# if target ov movement is another object, this indicates the node path of target object
+# if target of movement is another object, this indicates the node path of target object
 export(NodePath) var target_object
 
 # define if moving object have to be automatically destroyed at the end of movement
@@ -202,6 +202,25 @@ func stop():
 		emit_signal("move_interrupted")
 		_moving = false
 		_destroy()
+
+# returns absolute NodePath of object to move
+func get_target_object_path():
+	# define in o the object to move (parent or another object stored in object_to_move)
+	var o
+	if object_mode == BEHAVIOR_MOVE_TO_OBJECT._PARENT:
+		o = get_parent()
+	else:
+		if object_to_move:
+			o = get_node(object_to_move)
+		else:
+			o = null
+	
+	# if there isn't a valid object to move, quit
+	if !o:
+		return null
+	
+	#print (o.get_path())
+	return o.get_path()
 
 # the Tween is completed successfull
 func _on_tween_completed (object, key):

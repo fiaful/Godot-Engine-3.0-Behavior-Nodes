@@ -19,3 +19,20 @@ func get_node_by_path(path):
 			path.substr(1, path.length())
 		node = get_tree().get_root().get_node(path)
 	return node
+
+# search a child of type class_name in object o
+func _search_child_by_classname(o, class_name):
+	# if base object is invalid returns null
+	if !o:
+		return null
+	# if base object is of type class_name returns base object
+	if o.has_method("check_class_name") and o.check_class_name(class_name):
+		return o
+	# searching start
+	for n in o.get_children():
+		# found: returns n
+		if n.has_method("check_class_name") and n.check_class_name(class_name):
+			return n
+	# not found: returns null
+	return null
+	
