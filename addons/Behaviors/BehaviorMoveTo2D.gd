@@ -5,7 +5,11 @@
 # Version: 1.0
 # Last modify: 2018-06-15
 
-# Parent have to be: Node2D (or derivate) - Control (or derivate)
+# Requirements:
+# 	- for object mode = parent, parent have to be Node2D (or derivate) or Control (or derivate)
+# 	- for object mode = another object, parent can be any, object to move have to be Node2D (or derivate) or 
+#		Control (or derivate)
+# 	- for move target = another object, target object have to be Node2D (or derivate) or Control (or derivate)
 
 # Changelog:
 #
