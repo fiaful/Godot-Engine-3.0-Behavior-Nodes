@@ -36,3 +36,19 @@ func _search_child_by_classname(o, class_name):
 	# not found: returns null
 	return null
 	
+# set object position
+func set_position(obj, pos):
+	if "position" in obj:
+		obj.position = pos
+	elif "rect_position" in obj:
+		obj.rect_position = pos
+		
+# get object position
+func get_position(obj):
+	if "position" in obj:
+		return obj.position
+	elif "rect_position" in obj:
+		return obj.rect_position
+	else:
+		return Vector2(-1, -1)
+	
