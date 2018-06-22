@@ -1,0 +1,157 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://test/BehaviorObjectGrid2D/ObjectGrid.gd" type="Script" id=1]
+[ext_resource path="res://addons/Behaviors/BehaviorObjectGrid2D.gd" type="Script" id=2]
+[ext_resource path="res://addons/Behaviors/iconobjectgrid.png" type="Texture" id=3]
+[ext_resource path="res://test/BehaviorObjectGrid2D/FillerObject.tscn" type="PackedScene" id=4]
+[ext_resource path="res://test/BehaviorObjectGrid2D/Selected.tscn" type="PackedScene" id=5]
+[ext_resource path="res://test/BehaviorObjectGrid2D/Cursor.tscn" type="PackedScene" id=6]
+
+[node name="ObjectGrid" type="Node" index="0"]
+
+script = ExtResource( 1 )
+
+[node name="BehaviorObjectGrid2D" type="Node2D" parent="." index="0"]
+
+position = Vector2( 87.4257, 51.2496 )
+script = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+__meta__ = {
+"_editor_icon": ExtResource( 3 )
+}
+grid_size = Vector2( 9, 9 )
+cell_size = Vector2( 58, 58 )
+filler_object = ExtResource( 4 )
+selected_object = ExtResource( 5 )
+cursor_object = ExtResource( 6 )
+select_mapped_input = "ui_select"
+move_selection_left_mapped_input = "ui_left"
+move_selection_up_mapped_input = "ui_up"
+move_selection_right_mapped_input = "ui_right"
+move_selection_down_mapped_input = "ui_down"
+move_selection_circular = true
+cursor_movement_delay = 0.15
+cursor_visible = true
+cursor_under_mouse = true
+selected_visible = true
+cursor_hole = 2
+cursor_obstacle = 1
+
+[node name="RedimButton" type="Button" parent="." index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 785.0
+margin_top = 522.0
+margin_right = 880.0
+margin_bottom = 561.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Redim"
+flat = false
+align = 1
+
+[node name="HoleButton" type="Button" parent="." index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 785.0
+margin_top = 422.0
+margin_right = 880.0
+margin_bottom = 461.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Set hole"
+flat = false
+align = 1
+
+[node name="ObstacleButton" type="Button" parent="." index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 905.0
+margin_top = 422.0
+margin_right = 1000.0
+margin_bottom = 461.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Set obstacle"
+flat = false
+align = 1
+
+[node name="ToggleCursorVisibilityButton" type="CheckButton" parent="." index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 785.0
+margin_top = 472.0
+margin_right = 906.0
+margin_bottom = 512.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = true
+pressed = true
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Cursor visible"
+flat = false
+align = 1
+
+[connection signal="continuous_swipe" from="BehaviorObjectGrid2D" to="." method="_on_BehaviorObjectGrid2D_continuous_swipe"]
+
+[connection signal="continuous_swipe_end" from="BehaviorObjectGrid2D" to="." method="_on_BehaviorObjectGrid2D_continuous_swipe_end"]
+
+[connection signal="new_cell_object" from="BehaviorObjectGrid2D" to="." method="_on_new_cell_object"]
+
+[connection signal="swipe" from="BehaviorObjectGrid2D" to="." method="_on_BehaviorObjectGrid2D_swipe"]
+
+[connection signal="pressed" from="RedimButton" to="." method="_on_RedimButton_pressed"]
+
+[connection signal="pressed" from="HoleButton" to="." method="_on_HoleButton_pressed"]
+
+[connection signal="pressed" from="ObstacleButton" to="." method="_on_ObstacleButton_pressed"]
+
+[connection signal="toggled" from="ToggleCursorVisibilityButton" to="." method="_on_ToggleCursorVisibilityButton_toggled"]
+
+
